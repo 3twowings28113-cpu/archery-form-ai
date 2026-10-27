@@ -2,7 +2,7 @@
 
 右射ちリカーブ向けのフォーム分析Webアプリです。練習動画を選ぶと、ブラウザの中で姿勢を推定し、フォームを計測します。
 
-**公開ページ:** Cloudflare Pages で公開（URLはデプロイ後にここへ記載）
+**公開ページ:** https://archery-form-ai.pages.dev/
 
 ## 特徴
 
@@ -23,10 +23,8 @@
 ## 公開の仕組み（引き継ぎ用メモ）
 
 - このリポジトリ（GitHub）に `index.html` が入っています。これがアプリ本体のすべてです
-- `main` ブランチへ push すると GitHub Actions が Cloudflare Pages へ自動でデプロイします
-  - 必要な Secrets（リポジトリの Settings → Secrets and variables → Actions）:
-    - `CLOUDFLARE_API_TOKEN` … Cloudflare の API トークン（Pages の編集権限）
-    - `CLOUDFLARE_ACCOUNT_ID` … Cloudflare のアカウントID
+- Cloudflare Pages と GitHub が連携していて、`main` ブランチへ push すると自動でデプロイされます（Cloudflare ダッシュボード → Workers & Pages → archery-form-ai）
+  - Cloudflare のアカウントは当面、山下翼（3twowings28113@gmail.com）のアカウントで運用しています
 - リポジトリを他の人へ渡すとき: Settings → General → Danger Zone → Transfer ownership
 - Cloudflare 側を渡すとき: Cloudflare ダッシュボードで Pages プロジェクト `archery-form-ai` を相手のアカウントへ移すか、相手をアカウントメンバーに招待します
 
