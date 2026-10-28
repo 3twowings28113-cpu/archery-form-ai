@@ -14,7 +14,8 @@
 :root{
 --bg:#F7F6F3; --surface:#FFFFFF; --surface2:#EFEEE9; --ink:#1A1C1A; --ink2:#4A4F4A; --mut:#7C827C;
 --line:#DDDAD2; --line2:#C9C6BC;
---red:#B3352C; --red-d:#8F2A23; --red-soft:#F7E9E7;
+--red:#B3382A; --red-d:#8F2A23; --red-soft:#F7E9E7;
+--blue:#46688F; --blue-soft:#E8EDF3;
 --sage:#5F7263; --sage-soft:#E9EDE7;
 --amber:#8A6414; --amber-soft:#F4ECD8;
 --gold:#A87F24;
@@ -25,6 +26,7 @@
 :root{ --bg:#161816; --surface:#1F211F; --surface2:#262826; --ink:#EDEEEA; --ink2:#B9BDB6; --mut:#8B908A;
 --line:#353734; --line2:#454845;
 --red:#D96A5F; --red-d:#E08A80; --red-soft:#3A2422;
+--blue:#82A6CB; --blue-soft:#232C38;
 --sage:#9DB4A4; --sage-soft:#26302A;
 --amber:#D9B45C; --amber-soft:#38311C;
 --gold:#C9A24B;
@@ -45,7 +47,8 @@ svg.ic{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-wid
 .brand svg{width:26px;height:26px}
 .brand small{display:block;font-size:10.5px;font-weight:500;color:var(--mut);letter-spacing:.12em}
 .mast-spec{font-size:10.5px;color:var(--mut);letter-spacing:.14em;font-weight:500;text-align:right}
-.hero{padding:34px 0 8px;border-bottom:1px solid var(--line)}
+.hero{padding:34px 0 8px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;isolation:isolate}
+.hero-rings{position:absolute;z-index:-1;right:-86px;top:-8px;width:292px;height:292px;opacity:.16;pointer-events:none}
 .hero h1{font-size:32px;font-weight:700;letter-spacing:.01em;line-height:1.3}
 .hero p.lead{color:var(--ink2);font-size:14px;margin:12px 0 0;max-width:34em}
 .hero-cta{margin-top:22px}
@@ -68,6 +71,21 @@ section.blk{margin-top:44px}
 .sec-head .en{margin-left:auto;font-size:10.5px;color:var(--mut);letter-spacing:.16em;font-weight:500}
 .sub{color:var(--ink2);font-size:13.5px;margin:0 0 16px}
 .hint{font-size:12px;color:var(--mut)}
+/* ---------- archery motifs ---------- */
+.sec-head::before,.res-head::before{content:"";flex:none;align-self:center;width:21px;height:21px;border-radius:50%;border:1px solid var(--line2);background:radial-gradient(circle,var(--gold) 0 16%,var(--red) 16% 36%,var(--blue) 36% 56%,#2A2C2E 56% 78%,#F5F3EE 78% 100%)}
+.timeline{position:relative;padding-bottom:12px}
+.timeline::after{content:"";position:absolute;left:2px;right:11px;bottom:3px;height:2px;background:var(--line2)}
+.timeline::before{content:"";position:absolute;right:0;bottom:0;border-left:10px solid var(--red);border-top:4px solid transparent;border-bottom:4px solid transparent;z-index:1}
+.target-anim{display:flex;justify-content:center;margin:2px 0 10px}
+.target-anim svg{width:74px;height:74px}
+.target-anim circle{transform-box:fill-box;transform-origin:center;animation:ringPulse 1.8s ease-out infinite}
+.target-anim circle:nth-child(2){animation-delay:.3s}
+.target-anim circle:nth-child(3){animation-delay:.6s}
+.target-anim circle:nth-child(4){animation-delay:.9s}
+@keyframes ringPulse{0%{transform:scale(.5);opacity:.2}55%{opacity:1}100%{transform:scale(1);opacity:.9}}
+@media (prefers-reduced-motion: reduce){.target-anim circle{animation:none}}
+.bow-art{display:block;margin:4px auto 10px;width:132px;color:var(--ink2);opacity:.85}
+.empty-note{text-align:center;padding:12px 0 2px}
 /* ---------- direction ---------- */
 .dir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);background:var(--surface)}
 .dir-btn{border:none;border-right:1px solid var(--line);background:transparent;padding:16px 6px 14px;text-align:center;font-weight:700;font-size:15px;color:var(--ink);min-height:118px;word-break:keep-all;line-break:strict;position:relative}
@@ -92,7 +110,7 @@ section.blk{margin-top:44px}
 .or:before,.or:after{content:"";flex:1;border-top:1px solid var(--line)}
 .ghost-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:1px solid var(--line2);background:var(--surface);color:var(--ink2);border-radius:8px;padding:13px;font-weight:700;font-size:14px;min-height:48px}
 input[type=file]{display:none}
-.file-meta{display:none;margin-top:14px;font-size:13px;background:var(--sage-soft);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.file-meta{display:none;margin-top:14px;font-size:13px;background:var(--blue-soft);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
 /* ---------- video stage ---------- */
 .stage{margin-top:16px;background:#101211;border:1px solid #101211;border-radius:8px;overflow:hidden;display:none}
 .stage .screen{position:relative;background:#000}
@@ -200,7 +218,7 @@ input[type=file]{display:none}
 .hist-item .meta{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums}
 .hist-item .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
 .hist-item .row button{border:1px solid var(--line2);background:var(--surface);border-radius:6px;padding:7px 12px;font-size:12.5px;font-weight:700;color:var(--ink);min-height:44px;display:inline-flex;align-items:center;gap:6px}
-.badge-base{background:var(--red);color:#fff;font-size:10.5px;font-weight:700;border-radius:4px;padding:2px 8px;margin-left:6px;vertical-align:2px;letter-spacing:.05em}
+.badge-base{background:var(--gold);color:#191A17;font-size:10.5px;font-weight:700;border-radius:4px;padding:2px 8px;margin-left:6px;vertical-align:2px;letter-spacing:.05em}
 select,input[type=text],textarea{width:100%;border:1px solid var(--line2);border-radius:6px;padding:12px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:14px;min-height:48px}
 textarea{min-height:68px;resize:vertical}
 label.fl{display:block;font-size:12px;font-weight:700;margin:14px 0 6px;letter-spacing:.06em}
@@ -244,13 +262,14 @@ footer a{color:var(--ink2)}
 
 <header class="masthead">
 <div class="brand">
-<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="27" fill="none" stroke="var(--ink)" stroke-width="2"/><circle cx="30" cy="30" r="20" fill="none" stroke="var(--ink)" stroke-width="1.4" opacity=".55"/><circle cx="30" cy="30" r="13" fill="none" stroke="var(--ink)" stroke-width="1.4" opacity=".55"/><circle cx="30" cy="30" r="6.5" fill="var(--red)"/></svg>
+<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="27.5" fill="#F5F3EE" stroke="var(--line2)"/><circle cx="30" cy="30" r="21.5" fill="#2A2C2E"/><circle cx="30" cy="30" r="15.5" fill="#46688F"/><circle cx="30" cy="30" r="9.5" fill="#C23B2A"/><circle cx="30" cy="30" r="4" fill="#D9A41C"/></svg>
 <div>アーチェリーフォーム分析AI<small>ARCHERY FORM ANALYSIS</small></div>
 </div>
 <div class="mast-spec">右射ちリカーブ専用<br>個人練習用</div>
 </header>
 
 <div class="hero">
+<svg class="hero-rings" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="96" fill="none" stroke="var(--ink)" stroke-width="1.6"/><circle cx="100" cy="100" r="76" fill="none" stroke="var(--ink)" stroke-width="1.2"/><circle cx="100" cy="100" r="57" fill="none" stroke="var(--blue)" stroke-width="1.8"/><circle cx="100" cy="100" r="38" fill="none" stroke="var(--red)" stroke-width="1.8"/><circle cx="100" cy="100" r="19" fill="none" stroke="var(--gold)" stroke-width="1.8"/></svg>
 <h1>フォームを計測する。</h1>
 <p class="lead">スマホで撮った1射の動画から、肩・肘・頭・胴体の動きを骨格で読み取ります。総合点は付けず、見えた事実と「いつもとの差」だけを表示します。</p>
 <div class="hero-cta">
@@ -319,6 +338,7 @@ footer a{color:var(--ink2)}
 </div>
 
 <div class="progress-box" id="progressBox">
+<div class="target-anim" aria-hidden="true"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="var(--ink)" stroke-width="1.6"/><circle cx="40" cy="40" r="26" fill="none" stroke="var(--blue)" stroke-width="2"/><circle cx="40" cy="40" r="16" fill="none" stroke="var(--red)" stroke-width="2"/><circle cx="40" cy="40" r="6.5" fill="var(--gold)" stroke="none"/></svg></div>
 <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 <p class="progress-txt" id="progressTxt">準備中…</p>
 <button class="chip-btn" id="cancelBtn">分析をやめる</button>
@@ -418,7 +438,7 @@ footer a{color:var(--ink2)}
 <div class="tour-step on" data-tour="0">
 <h2 style="margin-top:12px">1. 方向と動画を選ぶ</h2>
 <p>最初に「どの方向から撮ったか」を選び、撮影した動画を1つ選びます。右・左の側面では足元が映っていなくても大丈夫ですが、その場合スタンス（足の位置）は「判定不可」になります。</p>
-<svg viewBox="0 0 320 120" style="width:100%"><rect x="10" y="10" width="300" height="100" rx="6" fill="none" stroke="var(--line2)"/><circle cx="120" cy="42" r="9" fill="var(--sage)"/><path d="M120 51v30M120 60l34-8M120 60l-20 14M120 81l-12 24M120 81l14 24" stroke="var(--sage)" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M168 22q10 38 0 76" stroke="var(--red)" stroke-width="4" fill="none"/><text x="200" y="55" font-size="13" fill="currentColor">動画の上に</text><text x="200" y="75" font-size="13" fill="currentColor">骨格が重なります</text></svg>
+<svg viewBox="0 0 320 120" style="width:100%"><rect x="10" y="10" width="300" height="100" rx="6" fill="none" stroke="var(--line2)"/><circle cx="120" cy="42" r="9" fill="var(--blue)"/><path d="M120 51v30M120 60l34-8M120 60l-20 14M120 81l-12 24M120 81l14 24" stroke="var(--blue)" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M168 22q10 38 0 76" stroke="var(--red)" stroke-width="4" fill="none"/><text x="200" y="55" font-size="13" fill="currentColor">動画の上に</text><text x="200" y="75" font-size="13" fill="currentColor">骨格が重なります</text></svg>
 </div>
 <div class="tour-step" data-tour="1">
 <h2>2. フェーズ（射の区切り）を確認</h2>
@@ -474,7 +494,7 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){retur
 function renderGuide(){
 var g=GUIDES[state.dir];
 $("guideBox").innerHTML='<h3><svg class="ic" viewBox="0 0 24 24"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.4"/></svg>'+esc(g.title)+'</h3>'+
-'<div class="fig"><svg viewBox="0 0 260 90" width="260" height="90" role="img" aria-label="撮影範囲の図"><rect x="30" y="8" width="200" height="74" rx="8" fill="none" stroke="var(--red)" stroke-width="2" stroke-dasharray="5 4"/><circle cx="125" cy="30" r="7" fill="var(--sage)"/><path d="M125 37v24M125 44l28-6M125 44l-16 12M125 61l-8 18M125 61l10 18" stroke="var(--sage)" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M162 18q8 28 0 56" stroke="var(--red)" stroke-width="3" fill="none"/><text x="36" y="24" font-size="10" fill="var(--mut)">撮影範囲</text><text x="185" y="82" font-size="10" fill="var(--mut)">三脚 →</text><circle cx="216" cy="66" r="4" fill="var(--mut)"/></svg></div>'+
+'<div class="fig"><svg viewBox="0 0 260 90" width="260" height="90" role="img" aria-label="撮影範囲の図"><rect x="30" y="8" width="200" height="74" rx="8" fill="none" stroke="var(--red)" stroke-width="2" stroke-dasharray="5 4"/><circle cx="125" cy="30" r="7" fill="var(--blue)"/><path d="M125 37v24M125 44l28-6M125 44l-16 12M125 61l-8 18M125 61l10 18" stroke="var(--blue)" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M162 18q8 28 0 56" stroke="var(--red)" stroke-width="3" fill="none"/><text x="36" y="24" font-size="10" fill="var(--mut)">撮影範囲</text><text x="185" y="82" font-size="10" fill="var(--mut)">三脚 →</text><circle cx="216" cy="66" r="4" fill="var(--mut)"/></svg></div>'+
 '<ul><li><b>見られる項目：</b>'+esc(g.can)+'</li><li><b>映すもの：</b>'+esc(g.need)+'</li><li><b>置く場所：</b>'+esc(g.pos)+'</li></ul>'+
 '<p class="hint">'+esc(g.note)+'</p>'+
 '<div class="safety"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2.8 20h18.4z"/><path d="M12 10v4.4"/><circle cx="12" cy="17.2" r=".5" fill="currentColor"/></svg><span>安全注意：射線より前に人やスマホを置かないでください。正面・斜め前方・斜め後方・的側からの撮影は対応方向に含めません。スマホは必ず射線の後ろ側に置いてください。</span></div>';
@@ -530,11 +550,11 @@ function drawOverlay(highlight){
 var ctx=overlay.getContext("2d"); if(!overlay.width) return; ctx.clearRect(0,0,overlay.width,overlay.height);
 if(!$("skelToggle").checked) return;
 var s=nearestSample(video.currentTime); if(!s||!s.lm) return; var lm=s.lm,W=overlay.width,H=overlay.height;
-ctx.lineWidth=Math.max(2,W/220); ctx.strokeStyle="rgba(95,114,99,.98)"; ctx.lineCap="round";
+ctx.lineWidth=Math.max(2,W/220); ctx.strokeStyle="rgba(84,128,175,.97)"; ctx.lineCap="round";
 CONNECTIONS.forEach(function(c){ var a=lm[c[0]],b=lm[c[1]]; if(!a||!b||a.visibility<0.4||b.visibility<0.4) return; ctx.beginPath(); ctx.moveTo(a.x*W,a.y*H); ctx.lineTo(b.x*W,b.y*H); ctx.stroke();});
-ctx.fillStyle="#B3352C";
+ctx.fillStyle="#C23B2A";
 lm.forEach(function(p,i){ if(!p||p.visibility<0.4) return; if([0,11,12,13,14,15,16,23,24].indexOf(i)<0) return; ctx.beginPath(); ctx.arc(p.x*W,p.y*H,Math.max(3,W/160),0,7); ctx.fill();});
-if(highlight){ ctx.strokeStyle="rgba(179,53,44,.95)"; ctx.lineWidth=Math.max(3,W/140); ctx.beginPath();
+if(highlight){ ctx.strokeStyle="rgba(201,151,28,.95)"; ctx.lineWidth=Math.max(3,W/140); ctx.beginPath();
 var pts=highlight.map(function(i){return lm[i]}).filter(Boolean);
 pts.forEach(function(p,i){ if(i===0)ctx.moveTo(p.x*W,p.y*H); else ctx.lineTo(p.x*W,p.y*H);}); ctx.stroke();}
 }
@@ -592,7 +612,7 @@ renderPhases(); $("sec-phases").classList.remove("hidden"); setStep(3);
 state.result=computeResult(samples,D);
 renderResults(); setStep(4);
 $("sec-phases").scrollIntoView({behavior:"smooth"});
-toast("分析が終わりました");
+toast("1射の分析が終わりました");
 }
 }
 $("bottomAnalyze").addEventListener("click",runAnalysis);
@@ -717,9 +737,9 @@ var pad=(mx-mn)*0.15+0.5; mn-=pad; mx+=pad;
 var W=640,H=110,T0=pts[0].t,T1=pts[pts.length-1].t||1;
 function X(t){return 30+(t-T0)/Math.max(0.1,T1-T0)*(W-50)} function Y(v){return 12+(mx-v)/(mx-mn)*(H-34)}
 var path=pts.map(function(p,i){return (i?"L":"M")+X(p.t).toFixed(1)+" "+Y(p.v).toFixed(1)}).join(" ");
-var circles=pts.filter(function(_,i){return i%2===0||pts.length<16}).map(function(p){return '<circle class="cp" data-t="'+p.t+'" data-v="'+p.v+'" cx="'+X(p.t).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="9" fill="transparent"/><circle cx="'+X(p.t).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="3.2" fill="var(--sage)" pointer-events="none"/>'}).join("");
-var baseLine=(baselineVal!=null)?'<line class="baseline-line" x1="30" x2="'+(W-20)+'" y1="'+Y(baselineVal)+'" y2="'+Y(baselineVal)+'" stroke="var(--red)" stroke-width="2" stroke-dasharray="6 4"/><text x="'+(W-24)+'" y="'+(Y(baselineVal)-5)+'" font-size="10" fill="var(--red)" text-anchor="end" font-weight="700">基準射</text>':"";
-return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="推移グラフ">'+baseLine+'<path d="'+path+'" fill="none" stroke="var(--sage)" stroke-width="2.2"/>'+circles+'</svg>';
+var circles=pts.filter(function(_,i){return i%2===0||pts.length<16}).map(function(p){return '<circle class="cp" data-t="'+p.t+'" data-v="'+p.v+'" cx="'+X(p.t).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="9" fill="transparent"/><circle cx="'+X(p.t).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="3.2" fill="var(--blue)" pointer-events="none"/>'}).join("");
+var baseLine=(baselineVal!=null)?'<line class="baseline-line" x1="30" x2="'+(W-20)+'" y1="'+Y(baselineVal)+'" y2="'+Y(baselineVal)+'" stroke="var(--gold)" stroke-width="2" stroke-dasharray="6 4"/><text x="'+(W-24)+'" y="'+(Y(baselineVal)-5)+'" font-size="10" fill="var(--gold)" text-anchor="end" font-weight="700">基準射</text>':"";
+return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="推移グラフ">'+baseLine+'<path d="'+path+'" fill="none" stroke="var(--blue)" stroke-width="2.2"/>'+circles+'</svg>';
 }
 function confBadge(conf,why){
 if(conf==="hi") return '<span class="conf hi">高信頼</span>';
@@ -853,9 +873,9 @@ v.addEventListener("seeked",function(){
 canvas.width=v.videoWidth||640; canvas.height=v.videoHeight||360;
 ctx.drawImage(v,0,0,canvas.width,canvas.height);
 var s=nearestSample(t); if(s&&s.lm){ var lm=s.lm,W=canvas.width,H=canvas.height;
-ctx.lineWidth=Math.max(2,W/220); ctx.strokeStyle="rgba(95,114,99,.98)"; ctx.lineCap="round";
+ctx.lineWidth=Math.max(2,W/220); ctx.strokeStyle="rgba(84,128,175,.97)"; ctx.lineCap="round";
 CONNECTIONS.forEach(function(c){ var a=lm[c[0]],b=lm[c[1]]; if(!a||!b) return; ctx.beginPath(); ctx.moveTo(a.x*W,a.y*H); ctx.lineTo(b.x*W,b.y*H); ctx.stroke();});
-if(highlight){ ctx.strokeStyle="#B3352C"; ctx.lineWidth=Math.max(4,W/120); ctx.beginPath(); highlight.forEach(function(idx,i){ var p=lm[idx]; if(!p) return; if(i===0)ctx.moveTo(p.x*W,p.y*H); else ctx.lineTo(p.x*W,p.y*H);}); ctx.stroke();}
+if(highlight){ ctx.strokeStyle="#C9971C"; ctx.lineWidth=Math.max(4,W/120); ctx.beginPath(); highlight.forEach(function(idx,i){ var p=lm[idx]; if(!p) return; if(i===0)ctx.moveTo(p.x*W,p.y*H); else ctx.lineTo(p.x*W,p.y*H);}); ctx.stroke();}
 }
 });
 }
@@ -903,7 +923,7 @@ var ri=$("reproInline"); if(ri) ri.innerHTML=html;
 function renderHistory(){
 var store=loadStore();
 var hl=$("historyList");
-if(!store.items.length){ hl.innerHTML='<p class="hint">まだ保存した分析はありません。分析結果の「この結果を保存する」から追加できます。</p>';}
+if(!store.items.length){ hl.innerHTML='<div class="empty-note"><svg class="bow-art" viewBox="0 0 120 84" aria-hidden="true"><path d="M34 6 C52 26 52 58 34 78" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M34 6 L34 78" stroke="currentColor" stroke-width="1" opacity=".55"/><path d="M10 42 H100" stroke="currentColor" stroke-width="1.8"/><path d="M100 42 l-9 -4.5 M100 42 l-9 4.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M10 42 l11 -5.5 M10 42 l11 5.5" stroke="var(--red)" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><p class="hint">まだ保存した射はありません。分析結果の「この結果を保存する」から追加できます。</p></div>';}
 else hl.innerHTML=store.items.map(function(it){
 return '<div class="hist-item"><b>'+esc(it.name)+'</b>'+(store.baselineId===it.id?'<span class="badge-base">基準射</span>':"")+'<div class="meta">方向：'+({right:"右側面",left:"左側面",back:"後方"})[it.dir||"right"]+' ／ エイミング：'+(it.result&&it.result.aimTime!=null?fmt(it.result.aimTime,1)+"秒":"―")+'</div><div class="row">'+
 '<button data-act="base" data-id="'+it.id+'">基準射にする</button><button data-act="copy" data-id="'+it.id+'">文章コピー</button><button data-act="trash" data-id="'+it.id+'">ゴミ箱へ</button></div></div>';
