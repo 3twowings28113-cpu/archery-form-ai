@@ -253,6 +253,47 @@ footer a{color:var(--ink2)}
 .howto ol{margin:8px 0;padding-left:20px;font-size:13.5px}
 .howto li{margin:5px 0}
 .howto code{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:var(--surface2);padding:1px 6px;border-radius:4px}
+/* ---------- gauge / guide ---------- */
+.plain-desc{font-size:13.5px;color:var(--ink2);margin:10px 0 0}
+.gauge{position:relative;height:10px;background:var(--surface2);border-radius:99px;margin:12px 0 4px}
+.gauge .band{position:absolute;top:0;bottom:0;background:var(--sage);opacity:.5;border-radius:99px}
+.gauge .mark{position:absolute;top:-4px;width:4px;height:18px;background:var(--red);border-radius:2px;transform:translateX(-50%)}
+.gauge-scale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--mut)}
+.verdict{font-size:13.5px;font-weight:700;margin:8px 0 0}
+.guide-note{font-size:11px;color:var(--mut);margin:4px 0 0}
+/* ---------- timeline drag handles ---------- */
+.timeline{padding-top:10px}
+.tl-handle{position:absolute;top:0;width:28px;height:52px;margin-left:-14px;background:transparent;border:none;z-index:3;cursor:ew-resize;touch-action:none;padding:0}
+.tl-handle i{position:absolute;left:50%;top:12px;width:3px;height:38px;transform:translateX(-50%);background:var(--mut);border-radius:2px}
+.tl-handle b{position:absolute;left:50%;top:0;transform:translateX(-50%);width:11px;height:11px;border-radius:50%;background:var(--surface);border:2px solid var(--mut)}
+.tl-handle.sel i{background:var(--red);width:4px}
+.tl-handle.sel b{border-color:var(--red)}
+/* ---------- baseline list / diff bars ---------- */
+.base-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.base-row input[type=text]{flex:1;min-width:150px;width:auto;min-height:44px}
+.diff-row{margin:14px 0}
+.diff-head{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;flex-wrap:wrap}
+.diff-track{position:relative;height:8px;background:var(--surface2);border-radius:99px;margin:9px 0 3px}
+.db-base{position:absolute;top:-4px;width:3px;height:16px;background:var(--gold);transform:translateX(-50%)}
+.db-cur{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;background:var(--blue);border:2px solid var(--surface);transform:translate(-50%,-50%)}
+.diff-scale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--mut)}
+/* ---------- review bar ---------- */
+.review-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px;border:1px solid var(--line);background:var(--surface);padding:10px 12px;border-radius:8px}
+.review-bar .rb-lab{font-size:12px;font-weight:700;color:var(--mut);letter-spacing:.06em}
+/* ---------- trim ---------- */
+.trim-box{display:none;margin-top:16px;border:1px solid var(--line);background:var(--surface);padding:14px;border-radius:8px}
+.trim-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.trim-row label{font-size:12.5px;font-weight:700;min-width:34px}
+.trim-row input[type=range]{flex:1;accent-color:var(--red);height:32px;min-width:80px}
+.trim-row .tv{font-variant-numeric:tabular-nums;font-size:12.5px;min-width:44px;text-align:right}
+/* ---------- compare ---------- */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cmp-col video{width:100%;background:#000;border-radius:6px;display:none;margin-top:8px}
+.cmp-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.cmp-controls input[type=range]{flex:1;min-width:120px;accent-color:var(--red);height:32px}
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+table.cmp th,table.cmp td{border:1px solid var(--line);padding:8px 10px;text-align:right;font-variant-numeric:tabular-nums;background:var(--surface)}
+table.cmp th:first-child,table.cmp td:first-child{text-align:left}
 @media(min-width:640px){.hero h1{font-size:38px}.kv{grid-template-columns:repeat(4,1fr)}.metric .big{font-size:34px}}
 @media(max-width:560px){.tl-seg b{display:none}.tl-seg .tl-t{font-size:10px}}
 </style>
@@ -337,6 +378,14 @@ footer a{color:var(--ink2)}
 </div>
 </div>
 
+<div class="trim-box" id="trimBox">
+<h3 style="font-size:14.5px">分析する範囲（1射だけ切り取る）</h3>
+<p class="hint">まとめ撮りの動画では、見たい1射の開始と終了を合わせてください。分析はこの範囲だけが対象になります。</p>
+<div class="trim-row"><label for="trimStart">開始</label><input type="range" id="trimStart" min="0" max="100" step="0.1" value="0"><span class="tv" id="trimStartLab">0.0s</span><button class="mini-btn" id="trimStartNow">いまの位置</button></div>
+<div class="trim-row"><label for="trimEnd">終了</label><input type="range" id="trimEnd" min="0" max="100" step="0.1" value="0"><span class="tv" id="trimEndLab">0.0s</span><button class="mini-btn" id="trimEndNow">いまの位置</button></div>
+<button class="chip-btn" id="trimReset" style="margin-top:10px">範囲を全体に戻す</button>
+</div>
+
 <div class="progress-box" id="progressBox">
 <div class="target-anim" aria-hidden="true"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="var(--ink)" stroke-width="1.6"/><circle cx="40" cy="40" r="26" fill="none" stroke="var(--blue)" stroke-width="2"/><circle cx="40" cy="40" r="16" fill="none" stroke="var(--red)" stroke-width="2"/><circle cx="40" cy="40" r="6.5" fill="var(--gold)" stroke="none"/></svg></div>
 <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
@@ -349,9 +398,9 @@ footer a{color:var(--ink2)}
 <!-- 03 phases -->
 <section class="blk hidden" id="sec-phases">
 <div class="sec-head"><span class="no">03</span><h2>フェーズ確認</h2><span class="en">PHASES</span></div>
-<p class="sub">AIが「ここから次の動き」という候補を出しました。違っていたら、動画をその瞬間で止めて「このフレームに設定」を押すだけで直せます。専門用語の下に、やさしい言い換えも付けています。</p>
+<p class="sub">AIが「ここから次の動き」という候補を出しました。違っていたら、<b>タイムラインの境界の線を指でドラッグして動かす</b>だけで直せます。境界をタップすると、その瞬間のフレームに動画が移動します。±0.1秒ボタンでの微調整や、「このフレームに設定」でも直せます。専門用語の下に、やさしい言い換えも付けています。</p>
 <div class="timeline" id="phaseTimeline"></div>
-<p class="tl-note">タイムラインをタップすると、そのフェーズの瞬間へ動画が移動します。</p>
+<p class="tl-note">区切りは指で動かして直せます。境界の丸い取っ手を左右にドラッグしてください。</p>
 <div class="phase-list" id="phaseList"></div>
 <div class="phase-actions">
 <button class="mini-btn" data-shift="-1">−1秒</button>
@@ -394,14 +443,58 @@ footer a{color:var(--ink2)}
 <div class="sec-head"><span class="no">06</span><h2>保存した分析</h2><span class="en">HISTORY</span></div>
 <p class="sub">保存した結果はこのブラウザの中だけに残ります（外部送信なし）。3つ以上たまると「再現性（毎回どれだけそろっているか）」が表示されます。消したものはまずゴミ箱に入り、30日後に完全に消えるルールです。</p>
 <div id="reproBox"></div>
+<h3 style="margin-top:22px;font-size:14px">指標の推移（たまった結果のグラフ）</h3>
+<p class="hint">保存した分析がたまると、指標ごとの移り変わりが見られます。基準射を登録している場合は、その値が金の破線で入ります。</p>
+<label class="fl" for="trendMetric">見る指標</label>
+<select id="trendMetric">
+<option value="elbow">弓腕の肘角度（平均）</option>
+<option value="torso">胴体の傾き（平均）</option>
+<option value="head">頭部の位置（平均）</option>
+<option value="shoulder">肩の高さ差（平均）</option>
+<option value="aim">エイミング時間</option>
+</select>
+<div id="trendBox"></div>
 <div id="historyList"><p class="hint">まだ保存した分析はありません。分析結果の「この結果を保存する」から追加できます。</p></div>
 <h3 style="margin-top:22px;font-size:14px">ゴミ箱</h3>
 <div id="trashList"><p class="hint">ゴミ箱は空です。</p></div>
 </section>
 
+<!-- compare -->
+<section class="blk" id="sec-compare">
+<div class="sec-head"><span class="no">07</span><h2>2本を比べる</h2><span class="en">COMPARE</span></div>
+<p class="sub">動画ファイル自体は保存されないため、比べたい2本をその場で選んでください。2本を横に並べて同時に再生でき、スロー再生もできます。保存した結果どうしは、その下の表で数値を並べて比べられます。</p>
+<div class="cmp-grid">
+<div class="cmp-col">
+<b>A</b>
+<label class="ghost-btn" for="cmpFileA" style="margin-top:8px">動画Aを選ぶ</label>
+<input type="file" id="cmpFileA" accept="video/*">
+<video id="cmpVideoA" playsinline muted preload="metadata"></video>
+<label class="fl" for="cmpSelA">比べる結果A（保存済み）</label>
+<select id="cmpSelA"></select>
+</div>
+<div class="cmp-col">
+<b>B</b>
+<label class="ghost-btn" for="cmpFileB" style="margin-top:8px">動画Bを選ぶ</label>
+<input type="file" id="cmpFileB" accept="video/*">
+<video id="cmpVideoB" playsinline muted preload="metadata"></video>
+<label class="fl" for="cmpSelB">比べる結果B（保存済み）</label>
+<select id="cmpSelB"></select>
+</div>
+</div>
+<div class="cmp-controls">
+<button class="chip-btn primary" id="cmpPlay">同時に再生</button>
+<button class="chip-btn" id="cmpPause">一時停止</button>
+<input type="range" id="cmpSeek" min="0" max="1000" value="0" aria-label="2本共通の再生位置">
+<button class="chip-btn" data-cspd="0.25">0.25×</button>
+<button class="chip-btn" data-cspd="0.5">0.5×</button>
+<button class="chip-btn on" data-cspd="1">1×</button>
+</div>
+<div id="cmpTable"></div>
+</section>
+
 <!-- publish / handoff -->
 <section class="blk" id="sec-publish">
-<div class="sec-head"><span class="no">07</span><h2>公開・引き渡し</h2><span class="en">PUBLISH &amp; HANDOVER</span></div>
+<div class="sec-head"><span class="no">08</span><h2>公開・引き渡し</h2><span class="en">PUBLISH &amp; HANDOVER</span></div>
 <p class="sub">このアプリは1つのHTMLファイルだけで動きます。ファイルを書き出せば、GitHubとCloudflare Pagesでそのまま公開でき、あとから相手に渡すこともできます。</p>
 <button class="btn dark" id="exportBtn" style="width:100%"><svg class="ic" viewBox="0 0 24 24" style="stroke:var(--bg)"><path d="M12 3v12"/><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/><path d="M4 20h16"/></svg>index.html を書き出す（ダウンロード）</button>
 <div class="howto">
@@ -469,7 +562,7 @@ footer a{color:var(--ink2)}
 "use strict";
 /* ============ state ============ */
 var LS_KEY="archery-form-ai-v1";
-var state={ dir:"right", file:null, videoURL:null, duration:0, samples:[], phases:null, phasesAI:null, selPhase:0, result:null, baselineId:null, playing:false, raf:null, cancelled:false, clickerTime:null, armFrame:null};
+var state={ dir:"right", file:null, videoURL:null, duration:0, samples:[], phases:null, phasesAI:null, selPhase:0, result:null, baselineId:null, playing:false, raf:null, cancelled:false, clickerTime:null, armFrame:null, trimStart:0, trimEnd:null};
 var GUIDES={
 right:{title:"右側面（引き手側）の撮り方",can:"前後の姿勢の傾き、肩の高さ、弓腕（左腕）の肘の角度、引き手・引き肘の動き、グリップ（弓の持ち方）の様子",need:"頭から腰までと、弓全体、引き手が動く範囲が入るように",pos:"射手の真横（引き手側）に三脚を置き、上半身が画面いっぱいにならないよう少し余白を",note:"足元が映らない場合、スタンス（足の位置）と膝は判定不可になります。"},
 left:{title:"左側面（弓側）の撮り方",can:"体の動き、肩や胴体の変化、クリッカー（引く長さの合図をする板）の作動タイミング",need:"頭から腰までと、弓・矢・クリッカーが入るように",pos:"射手の真横（弓側）に三脚を置き、弓が画面からはみ出さないように",note:"クリッカーの残量をmmで出すには、長さの分かる目印が必要です。目印がない場合はmm表示はしません。"},
@@ -514,7 +607,7 @@ var s=+d.getAttribute("data-step");d.classList.toggle("on",s===n);d.classList.to
 }
 
 /* ============ store ============ */
-function loadStore(){ try{return JSON.parse(localStorage.getItem(LS_KEY))||{items:[],trash:[],intents:[],baselineHistory:[]}}catch(e){return{items:[],trash:[],intents:[],baselineHistory:[]}}}
+function loadStore(){ try{ var s=JSON.parse(localStorage.getItem(LS_KEY))||{items:[],trash:[],intents:[],baselineHistory:[],baselines:[]}; s.items=s.items||[]; s.trash=s.trash||[]; s.intents=s.intents||[]; s.baselineHistory=s.baselineHistory||[]; s.baselines=s.baselines||[]; return s;}catch(e){return{items:[],trash:[],intents:[],baselineHistory:[],baselines:[]}}}
 function saveStore(s){ try{localStorage.setItem(LS_KEY,JSON.stringify(s))}catch(e){toast("保存できませんでした（ブラウザの空き容量不足の可能性）")}}
 
 /* ============ video ============ */
@@ -523,7 +616,7 @@ $("fileInput").addEventListener("change",function(e){
 var f=e.target.files[0]; if(!f) return;
 if(!/video\/(mp4|quicktime|webm|.*)/.test(f.type||"") &&!/\.(mp4|mov|m4v)$/i.test(f.name)){ showErr("<b>このファイルは動画として読めませんでした。</b><br>対処：MP4またはMOV形式の動画を選んでください。"); return;}
 if(state.videoURL) URL.revokeObjectURL(state.videoURL);
-state.file=f; state.videoURL=URL.createObjectURL(f); state.result=null; state.samples=[]; state.phases=null;
+state.file=f; state.videoURL=URL.createObjectURL(f); state.result=null; state.samples=[]; state.phases=null; state.trimStart=0; state.trimEnd=null;
 video.src=state.videoURL; $("videoShell").style.display="block";
 $("fileMeta").style.display="block"; $("fileMeta").innerHTML="選択中：<b>"+esc(f.name)+"</b>（"+fmt(f.size/1048576,1)+" MB）このまま「分析をはじめる」で計測できます。";
 hideErr(); setStep(2); toast("動画を読み込みました");
@@ -532,6 +625,7 @@ video.addEventListener("loadedmetadata",function(){
 state.duration=video.duration||0; seekBar.max=1000;
 var shell=$("videoShell"); overlay.width=video.videoWidth||640; overlay.height=video.videoHeight||360;
 shell.style.aspectRatio=(video.videoWidth&&video.videoHeight)?(video.videoWidth+"/"+video.videoHeight):"";
+var tb=$("trimBox"); if(tb&&state.duration>0){ tb.style.display="block"; var tsr=$("trimStart"),ter=$("trimEnd"); tsr.max=state.duration; ter.max=state.duration; tsr.value=0; ter.value=state.duration; state.trimStart=0; state.trimEnd=state.duration; updTrimLab(); }
 updateTimeLab(); drawOverlay();
 });
 video.addEventListener("timeupdate",function(){ if(state.duration) seekBar.value=Math.round(video.currentTime/state.duration*1000); updateTimeLab(); drawOverlay();});
@@ -540,6 +634,13 @@ video.addEventListener("pause",function(){ state.playing=false; $("playBtn").inn
 $("playBtn").addEventListener("click",function(){ if(video.paused) video.play(); else video.pause();});
 seekBar.addEventListener("input",function(){ if(state.duration){ video.currentTime=seekBar.value/1000*state.duration; drawOverlay(); updateTimeLab();}});
 document.querySelectorAll(".spd").forEach(function(b){ b.addEventListener("click",function(){ document.querySelectorAll(".spd").forEach(function(x){x.classList.remove("on")}); b.classList.add("on"); video.playbackRate=parseFloat(b.getAttribute("data-spd"));});});
+/* trim (cut one shot) */
+function updTrimLab(){ var sl=$("trimStartLab"),el=$("trimEndLab"); if(sl) sl.textContent=fmt(state.trimStart||0,1)+"s"; if(el) el.textContent=fmt(state.trimEnd!=null?state.trimEnd:(state.duration||0),1)+"s"; }
+$("trimStart").addEventListener("input",function(){ var v=parseFloat(this.value); var e=state.trimEnd!=null?state.trimEnd:(state.duration||0); if(v>e-0.3){ v=Math.max(0,e-0.3); this.value=v; } state.trimStart=v; updTrimLab(); });
+$("trimEnd").addEventListener("input",function(){ var v=parseFloat(this.value); var s=state.trimStart||0; if(v<s+0.3){ v=s+0.3; this.value=v; } state.trimEnd=v; updTrimLab(); });
+$("trimStartNow").addEventListener("click",function(){ var e=state.trimEnd!=null?state.trimEnd:(state.duration||0); state.trimStart=Math.max(0,Math.min(Math.round(video.currentTime*10)/10,Math.max(0,e-0.3))); $("trimStart").value=state.trimStart; updTrimLab(); toast("開始を "+fmt(state.trimStart,1)+"秒にしました"); });
+$("trimEndNow").addEventListener("click",function(){ state.trimEnd=Math.max((state.trimStart||0)+0.3,Math.round(video.currentTime*10)/10); $("trimEnd").value=state.trimEnd; updTrimLab(); toast("終了を "+fmt(state.trimEnd,1)+"秒にしました"); });
+$("trimReset").addEventListener("click",function(){ state.trimStart=0; state.trimEnd=state.duration; $("trimStart").value=0; $("trimEnd").value=state.duration; updTrimLab(); toast("範囲を全体に戻しました"); });
 function updateTimeLab(){ $("timeLab").textContent=fmt(video.currentTime||0,1)+" / "+fmt(state.duration||0,1)+"s";}
 function loopDraw(){ if(!state.playing) return; drawOverlay(); state.raf=requestAnimationFrame(loopDraw);}
 
@@ -579,12 +680,13 @@ var off=document.createElement("video"); off.muted=true; off.playsInline=true; o
 var step=0.2, times=[];
 off.addEventListener("loadedmetadata",function(){
 var D=off.duration||state.duration; if(!isFinite(D)||D<=0){ fail("動画の長さを取得できませんでした"); return;}
-if(D>180) step=0.4; for(var t=0;t<D;t+=step) times.push(Math.round(t*10)/10); times.push(Math.round(D*10)/10);
+var t0=Math.max(0,Math.min(D-0.5,state.trimStart||0)); var t1=(state.trimEnd!=null&&state.trimEnd>t0+0.5)?Math.min(D,state.trimEnd):D;
+if(D>180) step=0.4; for(var t=t0;t<t1;t+=step) times.push(Math.round(t*10)/10); times.push(Math.round(t1*10)/10);
 var idx=0, samples=[];
 function fail(msg){ $("progressBox").style.display="none"; pose.close&&pose.close(); showErr("<b>分析できませんでした。</b><br>理由："+esc(msg)+"<br>対処：全身（頭から腰まで）が明るく映った動画で試してください。三脚で固定すると読み取りやすくなります。");}
 function next(){
 if(state.cancelled){ $("progressBox").style.display="none"; toast("分析を中止しました"); pose.close&&pose.close(); return;}
-if(idx>=times.length){ finish(samples,D); pose.close&&pose.close(); return;}
+if(idx>=times.length){ finish(samples,D,t0,t1); pose.close&&pose.close(); return;}
 var t=times[idx];
 $("progressFill").style.width=Math.round(idx/times.length*100)+"%";
 $("progressTxt").textContent="骨格を読み取り中… "+idx+" / "+times.length+" フレーム（"+fmt(t,1)+"秒地点）";
@@ -602,14 +704,15 @@ samples.push({t:times[idx],lm:lm}); idx++; next();
 });
 next();
 });
-function finish(samples,D){
+function finish(samples,D,t0,t1){
 $("progressBox").style.display="none";
 var detected=samples.filter(function(s){return s.lm});
 state.samples=samples; state.duration=D;
 if(detected.length<5){ showErr("<b>人物の骨格を十分に読み取れませんでした（判定不可）。</b><br>理由：検出できたフレームが "+detected.length+" 件だけでした。<br>対処：①射手が大きく映る動画にする ②逆光や暗い場所を避ける ③他の人が重なっていない動画で試す。"); return;}
-state.phasesAI=estimatePhases(samples,D); state.phases=JSON.parse(JSON.stringify(state.phasesAI));
+state.phasesAI=estimatePhases(samples,(t1!=null?t1:D),(t0||0)); state.phases=JSON.parse(JSON.stringify(state.phasesAI));
 renderPhases(); $("sec-phases").classList.remove("hidden"); setStep(3);
 state.result=computeResult(samples,D);
+if(t0!=null) state.result.range={start:t0,end:t1};
 renderResults(); setStep(4);
 $("sec-phases").scrollIntoView({behavior:"smooth"});
 toast("1射の分析が終わりました");
@@ -617,26 +720,31 @@ toast("1射の分析が終わりました");
 }
 $("bottomAnalyze").addEventListener("click",runAnalysis);
 
-/* phases estimation: right wrist (16) motion */
-function estimatePhases(samples,D){
+/* phases estimation: right wrist (16) motion, smoothed first to reduce jitter */
+function estimatePhases(samples,D,t0){
+t0=t0||0;
 var det=samples.filter(function(s){return s.lm});
-var conf="mid", confWhy="引き手の動きから推定";
-var wx=det.map(function(s){return{t:s.t,x:s.lm[16].x,y:s.lm[16].y}});
-// anchor: wrist closest to nose
-var anchorT=D*0.55, best=1e9;
-det.forEach(function(s){ var dx=s.lm[16].x-s.lm[0].x, dy=s.lm[16].y-s.lm[0].y, d=dx*dx+dy*dy; if(d<best){best=d;anchorT=s.t;}});
-// release: max wrist speed after anchor
-var relT=Math.min(D-0.2,anchorT+ (D-anchorT)*0.45), maxV=0;
-for(var i=1;i<wx.length;i++){ if(wx[i].t<anchorT) continue; var dt=wx[i].t-wx[i-1].t||0.2; var v=Math.abs(wx[i].x-wx[i-1].x)/dt; if(v>maxV){maxV=v;relT=wx[i].t;}}
-// draw start: wrist x moves notably before anchor
-var x0=wx.length?wx[0].x:0.5, drawT=D*0.25;
-for(var j=0;j<wx.length;j++){ if(wx[j].t>=anchorT) break; if(Math.abs(wx[j].x-x0)>0.06){ drawT=wx[j].t; break;}}
+var conf="mid", confWhy="引き手の動きから推定（時系列を平滑化して判定）";
+/* moving-average smoothing of the draw wrist over neighbouring frames */
+var sm=det.map(function(s,i){ var xs=0,ys=0,n=0; for(var k=-1;k<=1;k++){ var q=det[i+k]; if(q){ xs+=q.lm[16].x; ys+=q.lm[16].y; n++; } } return {t:s.t,x:xs/n,y:ys/n,nx:s.lm[0].x,ny:s.lm[0].y}; });
+/* anchor: smoothed wrist closest to nose */
+var anchorT=t0+(D-t0)*0.55, best=1e9;
+sm.forEach(function(p){ var dx=p.x-p.nx, dy=p.y-p.ny, d=dx*dx+dy*dy; if(d<best){best=d;anchorT=p.t;} });
+/* release: max wrist speed after anchor */
+var relT=Math.min(D-0.2,anchorT+(D-anchorT)*0.45), maxV=0;
+for(var i=1;i<sm.length;i++){ if(sm[i].t<anchorT) continue; var dt=sm[i].t-sm[i-1].t||0.2; var v=Math.abs(sm[i].x-sm[i-1].x)/dt; if(v>maxV){maxV=v;relT=sm[i].t;} }
+/* draw start: wrist x moves notably before anchor */
+var x0=sm.length?sm[0].x:0.5, drawT=t0+(anchorT-t0)*0.4;
+for(var j=0;j<sm.length;j++){ if(sm[j].t>=anchorT) break; if(Math.abs(sm[j].x-x0)>0.06){ drawT=sm[j].t; break; } }
 if(maxV>0.15) conf="hi";
-var setupT=Math.max(0.2,drawT*0.6), setT=Math.max(0.1,setupT*0.5);
+var setupT=Math.max(t0+0.2,drawT-(drawT-t0)*0.4), setT=Math.max(t0+0.1,t0+(setupT-t0)*0.5);
 var followT=Math.min(D,relT+Math.max(0.4,(D-relT)*0.4));
-var raw=[0,setT,setupT,drawT,anchorT,anchorT,relT,followT];
-// enforce order
-for(var k=1;k<raw.length;k++){ if(raw[k]<=raw[k-1]) raw[k]=Math.min(D,raw[k-1]+0.1);}
+var raw=[t0,setT,setupT,drawT,anchorT,anchorT,relT,followT];
+/* enforce order */
+for(var k=1;k<raw.length;k++){ if(raw[k]<=raw[k-1]) raw[k]=Math.min(D,raw[k-1]+0.1); }
+/* suppress too-short phases: every phase gets at least 0.3s */
+for(var m=1;m<raw.length;m++){ if(raw[m]-raw[m-1]<0.3) raw[m]=raw[m-1]+0.3; }
+if(raw[raw.length-1]>D){ raw[raw.length-1]=D; for(var m2=raw.length-2;m2>0;m2--){ if(raw[m2]>raw[m2+1]-0.3) raw[m2]=raw[m2+1]-0.3; } }
 return PHASES.map(function(p,i){ return {id:p.id,t:Math.round(raw[i]*10)/10,conf:conf,why:confWhy};});
 }
 
@@ -666,13 +774,59 @@ b.setAttribute("aria-label",PHASES[i].name+" "+fmt(ph.t,1)+"秒へ移動");
 b.addEventListener("click",function(){ selectPhase(i,true);});
 tl.appendChild(b);
 });
+for(var hi=1;hi<state.phases.length;hi++){
+var hb=document.createElement("button"); hb.type="button";
+hb.className="tl-handle"+(hi===state.selPhase?" sel":"");
+hb.style.left=(state.phases[hi].t/D*100)+"%";
+hb.setAttribute("data-idx",hi);
+hb.setAttribute("aria-label",PHASES[hi].name+"の境界。ドラッグで移動、タップでその瞬間へ移動");
+hb.innerHTML="<b></b><i></i>";
+tl.appendChild(hb);
 }
+attachPhaseHandles();
+}
+}
+function recomputeResult(){ if(state.samples&&state.samples.length&&state.result){ state.result=computeResult(state.samples,state.duration); renderResults(); } }
+function attachPhaseHandles(){
+var tl=$("phaseTimeline"); if(!tl||!state.phases) return;
+tl.querySelectorAll(".tl-handle").forEach(function(h){
+h.addEventListener("pointerdown",function(e){
+e.preventDefault();
+var idx=+h.getAttribute("data-idx"); state.selPhase=idx;
+var D=state.duration||1; var rect=tl.getBoundingClientRect();
+var startT=state.phases[idx].t; var moved=false;
+try{ h.setPointerCapture(e.pointerId); }catch(err){}
+function mv(ev){
+var frac=(ev.clientX-rect.left)/rect.width;
+var t=Math.round(Math.max(0,Math.min(1,frac))*D*10)/10;
+var prev=state.phases[idx-1].t+0.1;
+var next=(idx+1<state.phases.length)?state.phases[idx+1].t-0.1:D;
+t=Math.max(prev,Math.min(next,t));
+if(Math.abs(t-startT)>0.05) moved=true;
+state.phases[idx].t=t; state.phases[idx].manual=true;
+h.style.left=(t/D*100)+"%";
+var segs=tl.querySelectorAll(".tl-seg");
+function segW(i){ var a=state.phases[i].t, b=(i+1<state.phases.length)?state.phases[i+1].t:D; return Math.max(3,(b-a)/D*100); }
+if(segs[idx-1]) segs[idx-1].style.flexGrow=String(Math.round(segW(idx-1)*10)/10);
+if(segs[idx]){ segs[idx].style.flexGrow=String(Math.round(segW(idx)*10)/10); var lab=segs[idx].querySelector(".tl-t"); if(lab) lab.textContent=fmt(t,1)+"s"; }
+var rows=$("phaseList").querySelectorAll(".phase-row");
+if(rows[idx]) rows[idx].querySelector(".tm").textContent=fmt(t,1)+"秒";
+video.currentTime=t; drawOverlay(); updateTimeLab();
+}
+function up(){
+h.removeEventListener("pointermove",mv); h.removeEventListener("pointerup",up); h.removeEventListener("pointercancel",up);
+if(moved){ renderPhases(); recomputeResult(); toast(PHASES[idx].name+"の区切りを "+fmt(state.phases[idx].t,1)+"秒に直しました"); }
+else selectPhase(idx,true);
+}
+h.addEventListener("pointermove",mv); h.addEventListener("pointerup",up); h.addEventListener("pointercancel",up);
+});
+});
 }
 function selectPhase(i,seek){ state.selPhase=i; renderPhases(); if(seek&&state.phases){ video.currentTime=state.phases[i].t; video.pause(); drawOverlay(); updateTimeLab();}}
 document.querySelectorAll("[data-shift]").forEach(function(b){ b.addEventListener("click",function(){
-if(!state.phases) return; var ph=state.phases[state.selPhase]; ph.t=Math.max(0,Math.min(state.duration,Math.round((ph.t+parseFloat(b.getAttribute("data-shift")))*10)/10)); ph.manual=true; renderPhases(); video.currentTime=ph.t; drawOverlay(); updateTimeLab();
+if(!state.phases) return; var ph=state.phases[state.selPhase]; ph.t=Math.max(0,Math.min(state.duration,Math.round((ph.t+parseFloat(b.getAttribute("data-shift")))*10)/10)); ph.manual=true; renderPhases(); video.currentTime=ph.t; drawOverlay(); updateTimeLab(); recomputeResult();
 });});
-$("setFrameBtn").addEventListener("click",function(){ if(!state.phases) return; var ph=state.phases[state.selPhase]; ph.t=Math.round(video.currentTime*10)/10; ph.manual=true; renderPhases(); toast(PHASES[state.selPhase].name+" を "+fmt(ph.t,1)+"秒に設定しました");});
+$("setFrameBtn").addEventListener("click",function(){ if(!state.phases) return; var ph=state.phases[state.selPhase]; ph.t=Math.round(video.currentTime*10)/10; ph.manual=true; renderPhases(); recomputeResult(); toast(PHASES[state.selPhase].name+" を "+fmt(ph.t,1)+"秒に設定しました");});
 $("resetPhaseBtn").addEventListener("click",function(){ if(!state.phasesAI) return; state.phases=JSON.parse(JSON.stringify(state.phasesAI)); renderPhases(); if(state.samples.length){ state.result=computeResult(state.samples,state.duration); renderResults();} toast("AI推定に戻しました");});
 
 /* ============ metrics ============ */
@@ -720,9 +874,17 @@ if(state.dir!=="back") ng.push({item:"リリース後の腕ライン（後方）
 if(state.dir==="back") ng.push({item:"引き手の前後の軌道（側面項目）",reason:"後方動画では奥行き方向の動きが読み取りにくいため、参考表示にとどめました。"});
 if(state.dir!=="left") ng.push({item:"クリッカー作動の詳細",reason:"クリッカーは左側面（弓側）の動画で確認する項目です。この動画ではタイミングの手動記録のみ可能です。"});
 if(coverage<0.5) ng.push({item:"一部のフレームの骨格",reason:"人物を検出できないフレームがありました（検出率 "+Math.round(coverage*100)+"%）。その区間は参考値です。"});
+var rightElbowStats=stats(rightElbowH);
+var anchorAim=inPhase(samples,"anchor","release");
+var wristAimStats=stats(series(anchorAim,function(lm){return lm[16].x*100}));
+var relbowAnchorStats=stats(series(anchorAim,function(lm){ var sy=(lm[11].y+lm[12].y)/2; return (sy-lm[14].y)*100;}));
+function poseAt(tt){ if(tt==null) return null; var bp=null,bd=1e9; det.forEach(function(s){ var d=Math.abs(s.t-tt); if(d<bd){bd=d;bp=s;} }); return bp?bp.lm.map(function(p){return{x:p.x,y:p.y,visibility:p.visibility}}):null; }
+var anchorPose=poseAt(ph.anchor), releasePose=poseAt(ph.release);
 return {dir:state.dir,duration:D,coverage:coverage,baseConf:baseConf,createdAt:new Date().toISOString(),
 headTilt:headTilt,shoulderDiff:shoulderDiff,leftElbow:leftElbow,rightElbowH:rightElbowH,torso:torso,wristTrack:wristTrack,
 headStats:stats(headTilt),shoulderStats:stats(shoulderDiff),elbowStats:stats(leftElbow),torsoStats:stats(torso),
+rightElbowStats:rightElbowStats,relbowAnchorMean:relbowAnchorStats?relbowAnchorStats.mean:null,wristStab:wristAimStats?wristAimStats.sd:null,
+anchorPose:anchorPose,releasePose:releasePose,
 aimTime:aimTime,aimHeadMove:aimHead?aimHead.sd:null,
 followWrist:lastWrist?{x:Math.round(lastWrist.x*100),y:Math.round(lastWrist.y*100)}:null,
 phases:JSON.parse(JSON.stringify(state.phases||[])),ng:ng,armT:armFrame?armFrame.t:null,feetVisible:feetVisible};
@@ -746,10 +908,49 @@ if(conf==="hi") return '<span class="conf hi">高信頼</span>';
 if(conf==="mid") return '<span class="conf mid">参考値</span>';
 return '<span class="conf ng">判定不可</span>';
 }
+function verdictText(g){
+var v=g.value, lo=g.band[0], hi=g.band[1], w=Math.max(0.1,hi-lo);
+if(v>=lo&&v<=hi) return g.name+"は、目安の範囲の中です。";
+if(v<lo){ var d=lo-v; return g.name+"は、目安より"+(d<=w*0.6?"少し":"")+g.lowWord+"です（目安の下限まで "+fmt(d,1)+g.unit+"）。"; }
+var d2=v-hi; return g.name+"は、目安より"+(d2<=w*0.6?"少し":"")+g.highWord+"です（目安の上限から "+fmt(d2,1)+g.unit+"）。";
+}
+function gaugeHTML(g){
+var a=g.scale[0], b=g.scale[1];
+function pc(v){ return Math.max(0,Math.min(100,(v-a)/(b-a)*100)); }
+return '<div class="gauge" role="img" aria-label="目安バー"><span class="band" style="left:'+pc(g.band[0])+'%;width:'+Math.max(1,pc(g.band[1])-pc(g.band[0]))+'%"></span><span class="mark" style="left:'+pc(g.value)+'%"></span></div>'+
+'<div class="gauge-scale"><span>'+a+g.unit+'</span><span>色の帯＝目安の範囲 ／ 赤い線＝今回の値</span><span>'+b+g.unit+'</span></div>'+
+'<p class="verdict">'+esc(verdictText(g))+'</p>'+
+'<p class="guide-note">この「目安」は基本フォーム確認のための参考です。体格や意図によっては、範囲の外でも問題ないことがあります。当たる・当たらないといった因果の判定には使いません。</p>';
+}
+function diffBar(label,cur,base,scale,unit){
+var a=scale[0], b=scale[1];
+function pc(v){ return Math.max(0,Math.min(100,(v-a)/(b-a)*100)); }
+var d=cur-base;
+return '<div class="diff-row"><div class="diff-head"><b>'+esc(label)+'</b><span>いま '+fmt(cur,1)+unit+' ／ 基準射 '+fmt(base,1)+unit+'（差 '+(d>=0?"+":"")+fmt(d,1)+unit+'）</span></div>'+
+'<div class="diff-track"><i class="db-base" style="left:'+pc(base)+'%"></i><i class="db-cur" style="left:'+pc(cur)+'%"></i></div>'+
+'<div class="diff-scale"><span>'+a+unit+'</span><span>金の線＝基準射 ／ 青い丸＝今回</span><span>'+b+unit+'</span></div></div>';
+}
+function drawGhost(){
+var cv=document.getElementById("ghostCanvas"); if(!cv) return;
+var r=state.result, base=baselineStats(); if(!r||!base||!r.anchorPose||!base.anchorPose) return;
+var ctx=cv.getContext("2d"), W=cv.width, H=cv.height;
+ctx.clearRect(0,0,W,H);
+function prep(lm){ var sx=(lm[11].x+lm[12].x)/2, sy=(lm[11].y+lm[12].y)/2; var sw=Math.abs(lm[11].x-lm[12].x)||0.2; var k=0.36/sw; return lm.map(function(p){ return {x:0.5+(p.x-sx)*k, y:0.40+(p.y-sy)*k, v:(p.visibility==null?1:p.visibility)}; }); }
+function draw(lm,color,alpha,lw){ var pts=prep(lm); ctx.save(); ctx.globalAlpha=alpha; ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.lineCap="round";
+CONNECTIONS.forEach(function(c){ var a=pts[c[0]],b=pts[c[1]]; if(!a||!b||a.v<0.3||b.v<0.3) return; ctx.beginPath(); ctx.moveTo(a.x*W,a.y*H); ctx.lineTo(b.x*W,b.y*H); ctx.stroke(); });
+ctx.fillStyle=color;
+pts.forEach(function(p,i){ if(p.v<0.3) return; if([0,11,12,13,14,15,16,23,24].indexOf(i)<0) return; ctx.beginPath(); ctx.arc(p.x*W,p.y*H,3.4,0,7); ctx.fill(); });
+ctx.restore(); }
+draw(base.anchorPose,"#C9971C",0.55,5);
+draw(r.anchorPose,"#5480AF",0.95,3);
+}
 function metricCard(opts){
 var id="m-"+opts.key;
+var g=opts.guide;
+var guideHtml=g?('<p class="plain-desc">'+esc(g.desc)+'</p>'+((g.value!=null&&isFinite(g.value))?gaugeHTML(g):"")):"";
 return '<article class="metric" id="'+id+'"><h3>'+esc(opts.title)+' <span class="en">'+esc(opts.en||"")+'</span> '+confBadge(opts.conf)+'</h3>'+
 (opts.big?'<p class="big">'+opts.big+'</p>':"")+
+guideHtml+
 '<p class="obs">'+opts.obs+'</p>'+(opts.why?'<p class="why">参考値の理由：'+esc(opts.why)+'</p>':"")+
 (opts.stats?'<div class="kv">'+(opts.big?"":'<div><b>平均</b><span>'+opts.stats.mean+'</span></div>')+'<div><b>ばらつき SD</b><span>'+opts.stats.sd+'</span></div><div><b>最小〜最大</b><span>'+opts.stats.range+'</span></div><div><b>使えたフレーム</b><span>'+opts.stats.n+'<small>件</small></span></div></div>':"")+
 (opts.chart?opts.chart+'<p class="chart-val" id="cv-'+opts.key+'">グラフの点をタップすると、その瞬間の数値と静止画が出ます。</p><div class="still-box" id="sb-'+opts.key+'"><canvas width="640" height="360"></canvas><button class="chip-btn" data-playseg="'+opts.key+'" style="margin-top:8px"><svg class="ic" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>この前後を動画で見る</button></div>':"")+
@@ -774,21 +975,26 @@ var dirName=({right:"右側面",left:"左側面",back:"後方"})[r.dir];
 function tabBtn(id,label){ return '<button class="tab-btn'+(curTab===id?" on":"")+'" data-tab="'+id+'" role="tab">'+label+'</button>';}
 function panel(id,inner){ return '<div class="tab-panel'+(curTab===id?" on":"")+'" data-panel="'+id+'">'+inner+'</div>';}
 var html='<div class="res-head"><span class="no">04</span><h2>結果</h2><span style="margin-left:auto;font-size:10.5px;color:var(--mut);letter-spacing:.16em;font-weight:500">RESULTS</span></div>';
-html+='<p class="res-meta">検出率 '+Math.round(r.coverage*100)+'% ／ 撮影方向 '+dirName+' ／ 動画 '+fmt(r.duration,1)+'s</p>';
+html+='<p class="res-meta">検出率 '+Math.round(r.coverage*100)+'% ／ 撮影方向 '+dirName+' ／ 動画 '+fmt(r.duration,1)+'s'+((r.range&&(r.range.start>0.05||r.range.end<r.duration-0.05))?' ／ 分析範囲 '+fmt(r.range.start,1)+'〜'+fmt(r.range.end,1)+'s':"")+'</p>';
+html+='<div class="review-bar"><span class="rb-lab">見直し</span>'+
+'<button class="chip-btn" data-rspd="0.25">0.25× スロー</button><button class="chip-btn" data-rspd="0.5">0.5× スロー</button><button class="chip-btn on" data-rspd="1">1×</button>'+
+'<button class="chip-btn" id="jumpAnchorBtn">アンカーの瞬間へ</button>'+
+'<button class="chip-btn primary" id="slowReleaseBtn">リリース前後をスローで見る</button></div>';
 html+='<div class="tabs" role="tablist">'+tabBtn("obs","観測結果")+tabBtn("repro","再現性")+tabBtn("base","基準射との差")+tabBtn("check","基本確認")+tabBtn("ng","判定不可")+'</div>';
 /* ---- panel 1: observation ---- */
 var p1='<p class="lead-in">良し悪しの判定ではなく、動画から読み取れた位置・角度・時間です。</p>';
-p1+=metricCard({key:"head",title:"頭部（傾き・動き）",en:"HEAD",conf:r.baseConf,why:confWhy,big:(r.headStats?fmt(r.headStats.mean,1):"―"),obs:"頭の位置（肩の中心からのずれ、画面幅比）の平均です。エイミング中の頭の揺れ（標準偏差）は "+(r.aimHeadMove!=null?fmt(r.aimHeadMove,1):"―")+" でした。",stats:st(r.headStats,""),chart:chartSVG(r.headTilt,"",bHead?bHead.mean:null)});
-p1+=metricCard({key:"shoulder",title:"肩（左右の高さ差）",en:"SHOULDERS",conf:r.baseConf,why:confWhy,big:(r.shoulderStats?fmt(r.shoulderStats.mean,1):"―"),obs:"左右の肩の高さ差の平均です。正の値は右肩が下、負の値は右肩が上がっている状態です。",stats:st(r.shoulderStats,""),chart:chartSVG(r.shoulderDiff,"",bSh?bSh.mean:null)});
-p1+=metricCard({key:"elbow",title:"弓腕＝左腕（肘の角度）",en:"BOW ARM",conf:r.baseConf,why:confWhy,big:(r.elbowStats?fmt(r.elbowStats.mean,1)+"<small>°</small>":"―"),obs:"弓を持つ左肘の角度の平均です（180°でまっすぐ）。リリース直前とフォロースルーで保てているかは、グラフの後半の変化で確認できます。",stats:st(r.elbowStats,"°"),chart:chartSVG(r.leftElbow,"°",bEl?bEl.mean:null)});
-p1+=metricCard({key:"relbow",title:"引き肘＝右肘（高さ・軌道）",en:"DRAW ELBOW",conf:r.baseConf,why:confWhy,obs:"右肘の高さ（肩より上＝正）の推移です。ドローイングの軌道と、リリース後に後ろへ流れていく様子が分かります。",chart:chartSVG(r.rightElbowH,"",null)});
-p1+=metricCard({key:"torso",title:"胴体（傾き・揺れ）",en:"TORSO",conf:r.baseConf,why:confWhy,big:(r.torsoStats?fmt(r.torsoStats.mean,1)+"<small>°</small>":"―"),obs:"胴体の傾きの平均です。ばらつきは "+(r.torsoStats?fmt(r.torsoStats.sd,1):"―")+"° でした。意図的な前傾かどうかは、登録した「意図」とあわせて見てください。",stats:st(r.torsoStats,"°"),chart:chartSVG(r.torso,"°",bTo?bTo.mean:null)});
-p1+=metricCard({key:"wrist",title:"引き手（右手首）の軌道",en:"DRAW HAND",conf:r.baseConf,why:confWhy,obs:"引き手の横位置の推移です。アンカー（顔の決まった位置）で止まっている区間と、リリース後の動きが見えます。",chart:chartSVG(r.wristTrack,"",null)});
+p1+=metricCard({key:"head",title:"頭部（傾き・動き）",en:"HEAD",conf:r.baseConf,why:confWhy,big:(r.headStats?fmt(r.headStats.mean,1):"―"),guide:{name:"頭の位置",desc:"頭が、両肩の真ん中からどれだけ横にずれているかを見ています。",value:r.headStats?r.headStats.mean:null,unit:"",scale:[-15,15],band:[-4,4],lowWord:"左寄り",highWord:"右寄り"},obs:"頭の位置（肩の中心からのずれ、画面幅比）の平均です。エイミング中の頭の揺れ（標準偏差）は "+(r.aimHeadMove!=null?fmt(r.aimHeadMove,1):"―")+" でした。",stats:st(r.headStats,""),chart:chartSVG(r.headTilt,"",bHead?bHead.mean:null)});
+p1+=metricCard({key:"shoulder",title:"肩（左右の高さ差）",en:"SHOULDERS",conf:r.baseConf,why:confWhy,big:(r.shoulderStats?fmt(r.shoulderStats.mean,1):"―"),guide:{name:"肩の高さ差",desc:"左右の肩の高さの差を見ています。",value:r.shoulderStats?r.shoulderStats.mean:null,unit:"",scale:[-25,25],band:[-6,6],lowWord:"右肩が上がり気味",highWord:"右肩が下がり気味"},obs:"左右の肩の高さ差の平均です。正の値は右肩が下、負の値は右肩が上がっている状態です。",stats:st(r.shoulderStats,""),chart:chartSVG(r.shoulderDiff,"",bSh?bSh.mean:null)});
+p1+=metricCard({key:"elbow",title:"弓腕＝左腕（肘の角度）",en:"BOW ARM",conf:r.baseConf,why:confWhy,big:(r.elbowStats?fmt(r.elbowStats.mean,1)+"<small>°</small>":"―"),guide:{name:"弓腕の肘の角度",desc:"弓を持つ左肘が、どれだけまっすぐに伸びているかを見ています（180°でまっすぐ）。",value:r.elbowStats?r.elbowStats.mean:null,unit:"°",scale:[120,185],band:[165,180],lowWord:"曲がり気味",highWord:"伸び気味"},obs:"弓を持つ左肘の角度の平均です（180°でまっすぐ）。リリース直前とフォロースルーで保てているかは、グラフの後半の変化で確認できます。",stats:st(r.elbowStats,"°"),chart:chartSVG(r.leftElbow,"°",bEl?bEl.mean:null)});
+p1+=metricCard({key:"relbow",title:"引き肘＝右肘（高さ・軌道）",en:"DRAW ELBOW",conf:r.baseConf,why:confWhy,big:(r.relbowAnchorMean!=null?fmt(r.relbowAnchorMean,1):"―"),guide:{name:"引き肘の高さ",desc:"狙っている間（アンカーからリリースまで）、引き肘が肩の高さと比べてどの位置にあるかを見ています。",value:r.relbowAnchorMean,unit:"",scale:[-30,30],band:[-6,12],lowWord:"低め",highWord:"高め"},obs:"上の数字は、アンカーからリリースまでの右肘の高さ（肩より上＝正）の平均です。下のグラフは射全体での右肘の高さの推移で、ドローイングの軌道と、リリース後に後ろへ流れていく様子が分かります。",chart:chartSVG(r.rightElbowH,"",null)});
+p1+=metricCard({key:"torso",title:"胴体（傾き・揺れ）",en:"TORSO",conf:r.baseConf,why:confWhy,big:(r.torsoStats?fmt(r.torsoStats.mean,1)+"<small>°</small>":"―"),guide:{name:"胴体の傾き",desc:"胴体が、まっすぐ立った状態からどれだけ傾いているかを見ています。",value:r.torsoStats?r.torsoStats.mean:null,unit:"°",scale:[-15,15],band:[-5,5],lowWord:"左寄り",highWord:"右寄り"},obs:"胴体の傾きの平均です。ばらつきは "+(r.torsoStats?fmt(r.torsoStats.sd,1):"―")+"° でした。意図的な前傾かどうかは、登録した「意図」とあわせて見てください。",stats:st(r.torsoStats,"°"),chart:chartSVG(r.torso,"°",bTo?bTo.mean:null)});
+p1+=metricCard({key:"wrist",title:"引き手（右手首）の軌道",en:"DRAW HAND",conf:r.baseConf,why:confWhy,big:(r.wristStab!=null?fmt(r.wristStab,1):"―"),guide:{name:"狙っている間の手の動き",desc:"アンカーからリリースまで、引き手の位置がどれだけ安定しているか（位置のばらつき）を見ています。小さいほど安定しています。",value:r.wristStab,unit:"",scale:[0,8],band:[0,2.5],lowWord:"小さめ",highWord:"大きめ"},obs:"上の数字は、狙っている間の引き手の位置のばらつきです。下のグラフは射全体での引き手の横位置の推移で、アンカー（顔の決まった位置）で止まっている区間と、リリース後の動きが見えます。",chart:chartSVG(r.wristTrack,"",null)});
 p1+='<article class="metric"><h3>時間の観測 <span class="en">TIMING</span> '+confBadge(r.baseConf)+'</h3><div class="kv">'+
 '<div><b>エイミング時間</b><span>'+(r.aimTime!=null?fmt(r.aimTime,1)+"<small>秒</small>":"判定不可")+'</span></div>'+
 '<div><b>動画全体</b><span>'+fmt(r.duration,1)+'<small>秒</small></span></div>'+
 '<div><b>フォロースルーの引き手最終位置</b><span>'+(r.followWrist?"<small>横</small>"+r.followWrist.x+" <small>縦</small>"+r.followWrist.y:"判定不可")+'</span></div>'+
 '<div><b>クリッカー作動</b><span id="clickerVal">'+(state.clickerTime!=null?fmt(state.clickerTime,1)+"秒（手動記録）":"未記録")+'</span></div></div>'+
+(r.aimTime!=null?gaugeHTML({name:"エイミング時間",value:r.aimTime,unit:"秒",scale:[0,10],band:[1,5],lowWord:"短め",highWord:"長め"}):"")+
 '<div class="phase-actions"><button class="chip-btn" id="setClicker"><svg class="ic" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 3h-15z"/><path d="M10 21a2.2 2.2 0 0 0 4 0"/></svg>いまの再生位置をクリッカー作動として記録</button></div>'+
 '<p class="hint">クリッカーの自動検出は不確実なため「候補」扱いとし、このボタンでの手動記録を正式な記録にします。mm表示は、長さの基準が映っていないため行いません。</p></article>';
 if(r.dir==="back"||r.dir==="right"){
@@ -803,16 +1009,38 @@ html+=panel("obs",p1);
 html+=panel("repro",'<p class="lead-in">保存した分析が3つ以上たまると、ここに「安定している項目／ばらつきが大きい項目」が出ます。下の「保存した分析」欄でも確認できます。</p><div id="reproInline"></div>');
 /* ---- panel 3: baseline diff ---- */
 var p3="";
+var storeB=loadStore();
+var blist=(storeB.baselines||[]).slice();
+if(storeB.baselineId&&!blist.some(function(x){return x.id===storeB.baselineId})){ var bit=storeB.items.find(function(x){return x.id===storeB.baselineId}); if(bit) blist.push({id:bit.id,name:bit.name}); }
+if(blist.length){
+p3+='<h3 style="font-size:14.5px;margin:6px 0 4px">登録済みの基準射</h3><p class="hint">名前を付け替えられます。「この基準と比べる」で、比べる相手を切り替えます。</p>';
+p3+=blist.map(function(en){ var active=storeB.baselineId===en.id;
+return '<div class="base-row"><input type="text" class="base-name" data-bid="'+en.id+'" value="'+esc(en.name||"基準射")+'" aria-label="基準射の名前"><button class="chip-btn'+(active?" on":"")+'" data-setbase="'+en.id+'">'+(active?"比べる相手に設定中":"この基準と比べる")+'</button><button class="chip-btn" data-delbase="'+en.id+'">基準から外す</button></div>';
+}).join("");
+}
 if(base){
-var diffs=[];
-function diffLine(label,cur,b,unit,th){ if(cur&&b&&Math.abs(cur.mean-b.mean)>th) diffs.push("<li><b>"+label+"</b>：いま "+fmt(cur.mean,1)+unit+" ／ 基準射 "+fmt(b.mean,1)+unit+"（差 "+fmt(cur.mean-b.mean,1)+unit+"）</li>");}
-diffLine("頭部の位置",r.headStats,base.headStats,"",2); diffLine("肩の高さ差",r.shoulderStats,base.shoulderStats,"",3);
-diffLine("弓腕の肘角度",r.elbowStats,base.elbowStats,"°",4); diffLine("胴体の傾き",r.torsoStats,base.torsoStats,"°",2);
 var sameDir=base.dir===r.dir;
-p3+='<p class="lead-in">'+(sameDir?"同じ方向の基準射と比較しました。":"<b>方向が違う基準射</b>のため、共通する項目だけの参考比較です。")+' 測定のブレを超える主な差だけを表示しています。</p>';
-p3+=diffs.length?'<ul class="check-list">'+diffs.join("")+'</ul>':'<div class="notice">基準射と比べて、測定のブレを超える大きな差は見られませんでした。</div>';
+p3+='<p class="lead-in">'+(sameDir?"同じ方向の基準射と比較しました。":"<b>方向が違う基準射</b>のため、共通する項目だけの参考比較です。")+' まず、違いが大きいところから言葉で示します（観測できた事実だけです）。</p>';
+var cand=[];
+function addCand(label,cur,b,unit,th,scale){ if(cur&&b){ var d=cur.mean-b.mean; cand.push({label:label,cur:cur.mean,base:b.mean,unit:unit,d:d,score:Math.abs(d)/th,scale:scale}); } }
+addCand("頭部の位置",r.headStats,base.headStats,"",2,[-15,15]);
+addCand("肩の高さ差",r.shoulderStats,base.shoulderStats,"",3,[-25,25]);
+addCand("弓腕の肘角度",r.elbowStats,base.elbowStats,"°",4,[120,185]);
+addCand("胴体の傾き",r.torsoStats,base.torsoStats,"°",2,[-15,15]);
+if(r.aimTime!=null&&base.aimTime!=null) cand.push({label:"エイミング時間",cur:r.aimTime,base:base.aimTime,unit:"秒",d:r.aimTime-base.aimTime,score:Math.abs(r.aimTime-base.aimTime)/0.8,scale:[0,10]});
+cand.sort(function(x,y){return y.score-x.score});
+var top=cand.filter(function(c){return c.score>1}).slice(0,3);
+p3+='<h3 style="font-size:14.5px;margin:16px 0 4px">違いが大きいところ（上位3つ）</h3>';
+p3+=top.length?'<ul class="check-list">'+top.map(function(c){ return "<li><b>"+esc(c.label)+"</b>：いま "+fmt(c.cur,1)+c.unit+" ／ 基準射 "+fmt(c.base,1)+c.unit+"（差 "+(c.d>=0?"+":"")+fmt(c.d,1)+c.unit+"）</li>"; }).join("")+'</ul>':'<div class="notice">基準射と比べて、測定のブレを超える大きな差は見られませんでした。</div>';
+if(r.anchorPose&&base.anchorPose){
+p3+='<article class="metric"><h3>アンカー時点の骨格の重ね合わせ <span class="en">GHOST</span></h3><p class="obs">青＝今回の射、<span style="color:var(--gold);font-weight:700">金＝基準射</span>。両肩の位置と幅をそろえて重ねています。形の違いを見るためのもので、良し悪しの判定ではありません。</p><canvas id="ghostCanvas" width="480" height="360" style="width:100%;background:#101211;border-radius:6px;display:block"></canvas></article>';
 } else {
-p3+='<p class="lead-in">まだ基準射が登録されていません。「これが自分の基準にしたい」という1射を分析して、保存後に「基準射にする」を押してください。基準射は「正しいフォーム」という意味ではなく、あなたの比較のお手本です。</p>';
+p3+='<div class="notice">骨格の重ね合わせは、この基準射に骨格データが保存されていないため表示できません。基準にしたい射を新しく分析して保存し直すと、重ね合わせが出ます。</div>';
+}
+p3+='<h3 style="font-size:14.5px;margin:16px 0 4px">項目ごとの差</h3>';
+p3+=cand.length?cand.map(function(c){ return diffBar(c.label,c.cur,c.base,c.scale,c.unit); }).join(""):'<p class="hint">比べられる項目がありませんでした。</p>';
+} else {
+p3+='<p class="lead-in">まだ比べる相手の基準射が選ばれていません。「これが自分の基準にしたい」という1射を分析して、保存後に「基準射にする」を押してください。基準射は複数登録でき、名前を付けて切り替えて比べられます。基準射は「正しいフォーム」という意味ではなく、あなたの比較のお手本です。</p>';
 }
 p3+='<label class="toggle-row"><span>グラフに基準射の線を表示</span><span class="switch"><input type="checkbox" id="baseToggleState" checked><i></i></span></label>';
 html+=panel("base",p3);
@@ -859,10 +1087,19 @@ var playSegBtns=root.querySelectorAll("[data-playseg]");
 playSegBtns.forEach(function(b){ b.addEventListener("click",function(){ video.currentTime=Math.max(0,video.currentTime-1); video.play(); setTimeout(function(){video.pause()},2600);});});
 var ck=$("setClicker"); if(ck) ck.addEventListener("click",function(){ state.clickerTime=Math.round(video.currentTime*10)/10; var v=$("clickerVal"); if(v) v.textContent=fmt(state.clickerTime,1)+"秒（手動記録）"; if(state.result) state.result.clickerTime=state.clickerTime; toast("クリッカー作動を "+fmt(state.clickerTime,1)+"秒で記録しました");});
 var bt=$("baseToggleState"); if(bt) bt.addEventListener("change",renderResults);
+/* review bar: slow playback on the results screen */
+root.querySelectorAll("[data-rspd]").forEach(function(b){ b.addEventListener("click",function(){ video.playbackRate=parseFloat(b.getAttribute("data-rspd")); root.querySelectorAll("[data-rspd]").forEach(function(x){ x.classList.toggle("on",x===b); }); document.querySelectorAll(".spd").forEach(function(x){ x.classList.toggle("on",parseFloat(x.getAttribute("data-spd"))===video.playbackRate); }); });});
+var ja=root.querySelector("#jumpAnchorBtn"); if(ja) ja.addEventListener("click",function(){ if(!state.phases) return; var ph=state.phases[PHASES.findIndex(function(p){return p.id==="anchor"})]; video.currentTime=ph.t; video.pause(); drawOverlay(); updateTimeLab(); toast("アンカーの瞬間に移動しました"); });
+var sr=root.querySelector("#slowReleaseBtn"); if(sr) sr.addEventListener("click",function(){ if(!state.phases) return; var ph=state.phases[PHASES.findIndex(function(p){return p.id==="release"})]; video.playbackRate=0.25; root.querySelectorAll("[data-rspd]").forEach(function(x){ x.classList.toggle("on",x.getAttribute("data-rspd")==="0.25"); }); video.currentTime=Math.max(0,ph.t-0.6); video.play(); setTimeout(function(){ video.pause(); },3400); toast("リリース前後を0.25倍で再生します"); });
+/* multiple baselines: switch / remove / rename */
+root.querySelectorAll("[data-setbase]").forEach(function(b){ b.addEventListener("click",function(){ var s=loadStore(); s.baselineId=b.getAttribute("data-setbase"); saveStore(s); renderResults(); renderHistory(); toast("比べる基準射を切り替えました"); });});
+root.querySelectorAll("[data-delbase]").forEach(function(b){ b.addEventListener("click",function(){ var s=loadStore(); var id=b.getAttribute("data-delbase"); s.baselines=(s.baselines||[]).filter(function(x){return x.id!==id}); if(s.baselineId===id) s.baselineId=null; saveStore(s); renderResults(); renderHistory(); toast("基準から外しました"); });});
+root.querySelectorAll(".base-name").forEach(function(inp){ inp.addEventListener("change",function(){ var s=loadStore(); s.baselines=s.baselines||[]; var id=inp.getAttribute("data-bid"); var e=s.baselines.find(function(x){return x.id===id}); if(e) e.name=inp.value; else s.baselines.push({id:id,name:inp.value}); saveStore(s); toast("基準射の名前を保存しました"); });});
 var sv=$("saveResultBtn"); if(sv) sv.addEventListener("click",saveCurrentResult);
 var cp=$("copySummaryBtn"); if(cp) cp.addEventListener("click",copySummary);
 var ns=$("noSaveBtn"); if(ns) ns.addEventListener("click",function(){ toast("保存せずに終わりました");});
 if(r.dir==="back"&&state.armFrame){ var ac=$("armCanvas"); if(ac) drawStill(ac,state.armFrame.t,[15,13,11,12,14]);}
+drawGhost();
 renderRepro();
 }
 
@@ -925,7 +1162,7 @@ var store=loadStore();
 var hl=$("historyList");
 if(!store.items.length){ hl.innerHTML='<div class="empty-note"><svg class="bow-art" viewBox="0 0 120 84" aria-hidden="true"><path d="M34 6 C52 26 52 58 34 78" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M34 6 L34 78" stroke="currentColor" stroke-width="1" opacity=".55"/><path d="M10 42 H100" stroke="currentColor" stroke-width="1.8"/><path d="M100 42 l-9 -4.5 M100 42 l-9 4.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M10 42 l11 -5.5 M10 42 l11 5.5" stroke="var(--red)" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><p class="hint">まだ保存した射はありません。分析結果の「この結果を保存する」から追加できます。</p></div>';}
 else hl.innerHTML=store.items.map(function(it){
-return '<div class="hist-item"><b>'+esc(it.name)+'</b>'+(store.baselineId===it.id?'<span class="badge-base">基準射</span>':"")+'<div class="meta">方向：'+({right:"右側面",left:"左側面",back:"後方"})[it.dir||"right"]+' ／ エイミング：'+(it.result&&it.result.aimTime!=null?fmt(it.result.aimTime,1)+"秒":"―")+'</div><div class="row">'+
+return '<div class="hist-item"><b>'+esc(it.name)+'</b>'+((store.baselineId===it.id||(store.baselines||[]).some(function(x){return x.id===it.id}))?'<span class="badge-base">基準射'+(store.baselineId===it.id?"・比較中":"")+'</span>':"")+'<div class="meta">方向：'+({right:"右側面",left:"左側面",back:"後方"})[it.dir||"right"]+' ／ エイミング：'+(it.result&&it.result.aimTime!=null?fmt(it.result.aimTime,1)+"秒":"―")+'</div><div class="row">'+
 '<button data-act="base" data-id="'+it.id+'">基準射にする</button><button data-act="copy" data-id="'+it.id+'">文章コピー</button><button data-act="trash" data-id="'+it.id+'">ゴミ箱へ</button></div></div>';
 }).join("");
 var tl=$("trashList");
@@ -936,16 +1173,64 @@ return '<div class="hist-item"><b>'+esc(it.name)+'</b><div class="meta">完全�
 }).join("");
 hl.querySelectorAll("button[data-act]").forEach(function(b){ b.addEventListener("click",function(){ histAction(b.getAttribute("data-act"),b.getAttribute("data-id"));});});
 tl.querySelectorAll("button[data-act]").forEach(function(b){ b.addEventListener("click",function(){ histAction(b.getAttribute("data-act"),b.getAttribute("data-id"));});});
-renderRepro(); renderIntentList();
+renderRepro(); renderIntentList(); renderTrend(); renderCmpOptions();
 }
 function histAction(act,id){
 var store=loadStore();
-if(act==="base"){ var it=store.items.find(function(x){return x.id===id}); if(store.baselineId&&store.baselineId!==id) store.baselineHistory.push({id:store.baselineId,at:new Date().toISOString()}); store.baselineId=id; if(state.result) state.baselineId=id; saveStore(store); toast("基準射に設定しました（履歴にも残ります）"); if(state.result) renderResults();}
+if(act==="base"){ var it=store.items.find(function(x){return x.id===id}); if(store.baselineId&&store.baselineId!==id) store.baselineHistory.push({id:store.baselineId,at:new Date().toISOString()}); store.baselineId=id; store.baselines=store.baselines||[]; if(it&&!store.baselines.some(function(x){return x.id===id})) store.baselines.push({id:id,name:it.name}); if(state.result) state.baselineId=id; saveStore(store); toast("基準射に登録しました（複数登録でき、結果画面で切り替えて比べられます）"); if(state.result) renderResults();}
 if(act==="copy"){ var it2=store.items.find(function(x){return x.id===id}); if(it2){ var txt=summaryText(it2.result); if(navigator.clipboard) navigator.clipboard.writeText(txt).then(function(){toast("文章をコピーしました")}); else fallbackCopy(txt);}}
 if(act==="trash"){ var idx=store.items.findIndex(function(x){return x.id===id}); if(idx>=0){ var it3=store.items.splice(idx,1)[0]; it3.trashedAt=Date.now(); store.trash.unshift(it3); if(store.baselineId===id) store.baselineId=null; saveStore(store); toast("ゴミ箱に移しました（30日間は復元できます）");}}
 if(act==="restore"){ var j=store.trash.findIndex(function(x){return x.id===id}); if(j>=0){ var it4=store.trash.splice(j,1)[0]; delete it4.trashedAt; store.items.unshift(it4); saveStore(store); toast("復元しました");}}
 if(act==="purge"){ store.trash=store.trash.filter(function(x){return x.id!==id}); saveStore(store); toast("完全に削除しました");}
 renderHistory();
+}
+/* ============ trend graph (history) ============ */
+function trendValue(r,key){ if(!r) return null; if(key==="elbow") return r.elbowStats?r.elbowStats.mean:null; if(key==="torso") return r.torsoStats?r.torsoStats.mean:null; if(key==="head") return r.headStats?r.headStats.mean:null; if(key==="shoulder") return r.shoulderStats?r.shoulderStats.mean:null; if(key==="aim") return r.aimTime; return null; }
+function trendUnit(key){ return (key==="elbow"||key==="torso")?"°":(key==="aim"?"秒":""); }
+function renderTrend(){
+var box=$("trendBox"); if(!box) return;
+var sel=$("trendMetric"); var key=sel?sel.value:"elbow"; var unit=trendUnit(key);
+var store=loadStore();
+var items=store.items.slice().sort(function(a,b){ return ((a.result&&a.result.createdAt)||"")<((b.result&&b.result.createdAt)||"")?-1:1; });
+var pts=items.map(function(it){ return {v:trendValue(it.result,key),d:it.result?it.result.createdAt:null}; }).filter(function(p){ return p.v!=null; });
+if(pts.length<2){ box.innerHTML='<p class="hint">保存した分析が2件以上たまると、ここに推移グラフが出ます（この指標で使えるのは今 '+pts.length+' 件）。</p>'; return; }
+var base=baselineStats(); var bv=base?trendValue(base,key):null;
+var vs=pts.map(function(p){return p.v}); if(bv!=null) vs.push(bv);
+var mn=Math.min.apply(null,vs), mx=Math.max.apply(null,vs); var pad=(mx-mn)*0.2+0.5; mn-=pad; mx+=pad;
+var W=640,H=170,PL=44,PR=16,PT=14,PB=30;
+function X(i){ return PL+(W-PL-PR)*(pts.length===1?0.5:i/(pts.length-1)); }
+function Y(v){ return PT+(mx-v)/(mx-mn)*(H-PT-PB); }
+var path=pts.map(function(p,i){ return (i?"L":"M")+X(i).toFixed(1)+" "+Y(p.v).toFixed(1); }).join(" ");
+var dots=pts.map(function(p,i){ return '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="4" fill="var(--blue)"/><text x="'+X(i).toFixed(1)+'" y="'+(Y(p.v)-9).toFixed(1)+'" font-size="10.5" fill="var(--ink2)" text-anchor="middle" font-weight="700">'+fmt(p.v,1)+unit+'</text>'; }).join("");
+function dlab(iso){ if(!iso) return ""; var d=new Date(iso); return (d.getMonth()+1)+"/"+d.getDate(); }
+var baseLine=(bv!=null)?'<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+Y(bv)+'" y2="'+Y(bv)+'" stroke="var(--gold)" stroke-width="2" stroke-dasharray="6 4"/><text x="'+(W-PR)+'" y="'+(Y(bv)-5)+'" font-size="10" fill="var(--gold)" text-anchor="end" font-weight="700">基準射 '+fmt(bv,1)+unit+'</text>':"";
+box.innerHTML='<svg class="chart" style="height:170px" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="指標の推移グラフ">'+baseLine+
+'<text x="4" y="'+(PT+4)+'" font-size="10" fill="var(--mut)">'+fmt(mx,0)+unit+'</text><text x="4" y="'+(H-PB)+'" font-size="10" fill="var(--mut)">'+fmt(mn,0)+unit+'</text>'+
+'<path d="'+path+'" fill="none" stroke="var(--blue)" stroke-width="2.2"/>'+dots+
+'<text x="'+PL+'" y="'+(H-8)+'" font-size="10.5" fill="var(--mut)">'+dlab(pts[0].d)+'</text><text x="'+(W-PR)+'" y="'+(H-8)+'" font-size="10.5" fill="var(--mut)" text-anchor="end">'+dlab(pts[pts.length-1].d)+'</text></svg>'+
+'<p class="hint">対象 '+pts.length+' 件。左が古く、右が新しい記録です。点の上の数字がその回の値です。</p>';
+}
+/* ============ compare two (videos + saved results) ============ */
+function cmpValue(r,key){ if(!r) return null; if(key==="stab") return r.aimHeadMove; return trendValue(r,key); }
+function renderCmpOptions(){
+var a=$("cmpSelA"), b=$("cmpSelB"); if(!a||!b) return;
+var store=loadStore(); var curA=a.value, curB=b.value;
+var html=store.items.length?store.items.map(function(it){ return '<option value="'+it.id+'">'+esc(it.name)+'</option>'; }).join(""):'<option value="">保存した分析がありません</option>';
+a.innerHTML=html; b.innerHTML=html;
+function keep(sel,cur,defIdx){ if(cur&&store.items.some(function(x){return x.id===cur})) sel.value=cur; else if(store.items[defIdx]) sel.value=store.items[defIdx].id; }
+keep(a,curA,0); keep(b,curB,1);
+renderCmpTable();
+}
+function renderCmpTable(){
+var box=$("cmpTable"); if(!box) return;
+var store=loadStore();
+var ia=store.items.find(function(x){return x.id===($("cmpSelA")||{}).value});
+var ib=store.items.find(function(x){return x.id===($("cmpSelB")||{}).value});
+if(!ia||!ib){ box.innerHTML='<p class="hint">保存した分析が2件たまると、ここで数値を並べて比べられます。</p>'; return; }
+var rows=[["頭部の位置（平均）","head",""],["肩の高さ差（平均）","shoulder",""],["弓腕の肘角度（平均）","elbow","°"],["胴体の傾き（平均）","torso","°"],["エイミング時間","aim","秒"],["エイミング中の頭の揺れ","stab",""]];
+var trs=rows.map(function(rw){ var va=cmpValue(ia.result,rw[1]), vb=cmpValue(ib.result,rw[1]);
+return '<tr><td>'+rw[0]+'</td><td>'+(va!=null?fmt(va,1)+rw[2]:"―")+'</td><td>'+(vb!=null?fmt(vb,1)+rw[2]:"―")+'</td><td>'+((va!=null&&vb!=null)?((vb-va>=0?"+":"")+fmt(vb-va,1)+rw[2]):"―")+'</td></tr>'; }).join("");
+box.innerHTML='<table class="cmp"><tr><th>項目</th><th>A</th><th>B</th><th>差（B−A）</th></tr>'+trs+'</table><p class="hint">A＝'+esc(ia.name)+'／B＝'+esc(ib.name)+'</p>';
 }
 $("bottomHistory").addEventListener("click",function(){ document.getElementById("sec-history").scrollIntoView({behavior:"smooth"});});
 
@@ -972,6 +1257,20 @@ $("tourPrev").addEventListener("click",function(){ if(tourIdx>0){tourIdx--; updT
 $("tourNext").addEventListener("click",function(){ if(tourIdx>=3){ $("sampleModal").classList.remove("open");} else { tourIdx++; updTour();}});
 $("sampleModal").addEventListener("click",function(e){ if(e.target===this) this.classList.remove("open");});
 
+/* compare section wiring */
+(function(){
+var tm=$("trendMetric"); if(tm) tm.addEventListener("change",renderTrend);
+var vA=$("cmpVideoA"), vB=$("cmpVideoB"); if(!vA||!vB) return;
+function cmpFile(inp,vid){ inp.addEventListener("change",function(){ var f=inp.files[0]; if(!f) return; vid.src=URL.createObjectURL(f); vid.style.display="block"; }); }
+cmpFile($("cmpFileA"),vA); cmpFile($("cmpFileB"),vB);
+$("cmpPlay").addEventListener("click",function(){ if(vA.src) vA.play(); if(vB.src) vB.play(); });
+$("cmpPause").addEventListener("click",function(){ vA.pause(); vB.pause(); });
+$("cmpSeek").addEventListener("input",function(){ var f=this.value/1000; if(vA.duration) vA.currentTime=f*vA.duration; if(vB.duration) vB.currentTime=f*vB.duration; });
+vA.addEventListener("timeupdate",function(){ var sk=$("cmpSeek"); if(vA.duration&&document.activeElement!==sk) sk.value=Math.round(vA.currentTime/vA.duration*1000); if(vB.src&&!vB.paused&&vB.duration&&Math.abs(vB.currentTime-vA.currentTime*(vB.duration/vA.duration))>0.35){ vB.currentTime=vA.currentTime*(vB.duration/vA.duration); } });
+document.querySelectorAll("[data-cspd]").forEach(function(b){ b.addEventListener("click",function(){ var r=parseFloat(b.getAttribute("data-cspd")); vA.playbackRate=r; vB.playbackRate=r; document.querySelectorAll("[data-cspd]").forEach(function(x){ x.classList.toggle("on",x===b); }); }); });
+$("cmpSelA").addEventListener("change",renderCmpTable);
+$("cmpSelB").addEventListener("change",renderCmpTable);
+})();
 /* trash auto-purge note: 30 days */
 (function(){ var s=loadStore(); var before=s.trash.length; s.trash=s.trash.filter(function(x){ return Date.now()-(x.trashedAt||Date.now())<30*86400000;}); if(s.trash.length!==before) saveStore(s);})();
 $("exportBtn").addEventListener("click",function(){
